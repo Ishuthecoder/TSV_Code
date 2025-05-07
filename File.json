@@ -1,0 +1,16 @@
+#!/bin/bash
+
+nav_url="https://www.amfiindia.com/spages/NAVAll.txt"
+output_file="amfi_nav.json"
+
+echo "[" > "$output_file"
+curl -s "$nav_url" | awk -F';' '
+  NR>2 { 
+    scheme_name=$4; 
+    asset_value=$8; 
+    print "  {\"scheme_name\":\"" scheme_name "\",\"asset_value\":\"" asset_value "\"},"
+  }
+' >> "$output_file"
+echo "]" >> "$output_file"
+sed -i '$d' "$output_file"
+sed -i '$s/,$//' "$output_file"
