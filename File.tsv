@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# URL of the NAV file
+nav_url="https://www.amfiindia.com/spages/NAVAll.txt"
+
+# Output file name
+output_file="amfi_nav.tsv"
+
+# Download the NAV file and extract the required data
+curl -s "$nav_url" | awk -F';' '
+  NR>2 { 
+    scheme_name=$4; 
+    asset_value=$8; 
+    print scheme_name "\t" asset_value 
+  }
+' > "$output_file"
+
+echo "Data saved to $output_file"
